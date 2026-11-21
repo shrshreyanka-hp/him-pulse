@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Project H.I.M Pulse — Interactive Pitch Showcase</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Space Grotesk, JetBrains Mono, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700;800&family=Space+Grotesk:wght@600;700;800;900&display=swap" rel="stylesheet" />
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            obsidian: '#090A0F',
+            carbon: '#11131A',
+            surfaceLight: '#1A1D26',
+            himTerracotta: '#FF5500',
+            himTerracottaDark: '#CC4400',
+            neonCyan: '#00E5FF',
+            cobaltBlue: '#2563EB',
+            electricGold: '#FFB800',
+            blinkitYellow: '#F8CB46',
+            labWhite: '#F8FAFC'
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif'],
+            mono: ['JetBrains Mono', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      background-color: #090A0F;
+      color: #F8FAFC;
+      font-family: 'Inter', sans-serif;
+      overflow-x: hidden;
+    }
+    
+    .font-display {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .font-mono {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .glass-card {
+      background: rgba(26, 29, 38, 0.6);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-himTerracotta selection:text-white">
+
+  <!-- ================= TOP PITCH TOOLBAR ================= -->
+  <header id="pitch-header" class="w-full bg-carbon/90 border-b border-white/10 sticky top-0 z-50 backdrop-blur-md px-4 py-3 transition-all duration-300">
+    <div class="max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-between gap-4">
+      
+      <!-- Brand & Title Badge -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-xl bg-gradient-to-br from-himTerracotta to-amber-600 flex items-center justify-center font-display font-black text-white text-2xl shadow-[0_0_20px_rgba(255,85,0,0.5)]">
+          H
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <h1 class="font-display font-black text-lg md:text-xl tracking-tight text-white">PROJECT H.I.M PULSE</h1>
+            <span class="px-2 py-0.5 text-[10px] font-mono font-extrabold uppercase tracking-widest bg-himTerracotta/20 text-himTerracotta border border-himTerracotta/40 rounded-full">IN·XT™ Science Engine</span>
+          </div>
+          <p class="text-xs text-gray-400">Viral Growth & Quick-Commerce Conversion Pitch for H.I.M (OFF/BEAT Studios)</p>
+        </div>
+      </div>
+
+      <!-- Quick Interactive Controls -->
+      <div class="flex flex-wrap items-center gap-2 md:gap-3">
+        
+        <!-- City Selector -->
+        <div class="flex items-center bg-obsidian border border-white/15 rounded-lg p-1 text-xs">
+          <span class="px-2 text-gray-400 font-semibold hidden sm:inline"><i class="fa-solid fa-location-dot text-himTerracotta me-1"></i>City:</span>
+          <button onclick="setCity('blr')" id="btn-blr" class="px-2.5 py-1 rounded-md font-bold transition-all bg-himTerracotta text-white shadow-sm">BLR (560001)</button>
+          <button onclick="setCity('del')" id="btn-del" class="px-2.5 py-1 rounded-md font-bold text-gray-400 hover:text-white transition-all">DEL (110001)</button>
+          <button onclick="setCity('bom')" id="btn-bom" class="px-2.5 py-1 rounded-md font-bold text-gray-400 hover:text-white transition-all">BOM (400001)</button>
+          <button onclick="setCity('has')" id="btn-has" class="px-2.5 py-1 rounded-md font-bold text-gray-400 hover:text-white transition-all">HAS (573201)</button>
+        </div>
+
+        <!-- Copy Outreach Pitch Button -->
+        <button onclick="openPitchModal()" class="px-3 py-2 bg-white/10 hover:bg-white/20 text-white font-semibold text-xs rounded-lg border border-white/15 flex items-center gap-1.5 transition-all">
+          <i class="fa-solid fa-paper-plane text-electricGold"></i>
+          <span>Copy Pitch Script</span>
+        </button>
+
+        <!-- Screenshot Mode Toggle Button -->
+        <button onclick="toggleScreenshotMode()" id="screenshot-btn" class="px-3.5 py-2 bg-gradient-to-r from-himTerracotta to-amber-500 hover:opacity-90 text-white font-bold text-xs rounded-lg flex items-center gap-2 shadow-[0_0_20px_rgba(255,85,0,0.3)] transition-all">
+          <i class="fa-solid fa-camera"></i>
+          <span id="screenshot-btn-text">Screenshot Mode</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Pitcher Helper Notice -->
+  <div id="pitch-notice" class="bg-gradient-to-r from-obsidian via-carbon to-obsidian border-b border-white/10 py-2 px-4 text-center text-xs text-gray-300 flex items-center justify-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-himTerracotta animate-ping"></span>
+    <span><strong>Official H·I·M Concept Mockups:</strong> Interactive demonstration featuring Ranveer Singh's iconic launch quotes & IN·XT™ Face Wash tube!</span>
+  </div>
+
+  <!-- ================= MAIN SHOWCASE CONTAINER ================= -->
+  <main class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-8 flex flex-col justify-center items-center">
+    
+    <!-- Hero Pitch Tagline -->
+    <div id="pitch-tagline" class="text-center mb-8 max-w-3xl">
+      <h2 class="font-display font-black text-2xl md:text-4xl tracking-tight text-white mb-2">
+        "Handsome & Indian Were Never Two Different Things."
+      </h2>
+      <p class="text-sm md:text-base text-gray-400">
+        A mobile-first <span class="text-himTerracotta font-bold">Engineering-as-Marketing</span> acquisition app leveraging live Indian hard-water (TDS) and AQI telemetry to turn launch buzz into immediate Blinkit & D2C conversions.
+      </p>
+    </div>
+
+    <!-- 3 PHONE FRAMES GRID -->
+    <div class="w-full flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-8 my-2">
+      
+      <!-- ================= PHONE 1: HOOK & AI SHELF ROASTER ================= -->
+      <div class="w-full max-w-[365px] h-[730px] bg-carbon rounded-[46px] p-3 border-[6px] border-white/15 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative flex flex-col justify-between overflow-hidden group hover:border-himTerracotta/50 transition-all duration-300">
+        
+        <!-- Status Bar -->
+        <div class="w-full pt-1 pb-2 px-6 flex items-center justify-between text-[11px] text-gray-400 font-mono border-b border-white/5 z-20 bg-carbon">
+          <span>9:41</span>
+          <div class="w-24 h-4 bg-obsidian rounded-full mx-auto flex items-center justify-center border border-white/10">
+            <div class="w-2 h-2 bg-himTerracotta rounded-full animate-ping"></div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-signal text-[10px]"></i>
+            <i class="fa-solid fa-wifi text-[10px]"></i>
+            <i class="fa-solid fa-battery-full text-[12px] text-himTerracotta"></i>
+          </div>
+        </div>
+
+        <!-- Phone 1 Content -->
+        <div class="flex-1 flex flex-col justify-between p-3.5 bg-obsidian overflow-y-auto no-scrollbar relative">
+          
+          <!-- Branding Header -->
+          <div class="flex items-center justify-between pb-2 border-b border-white/10">
+            <div class="flex items-center gap-2">
+              <span class="font-display font-black text-xl text-white tracking-tighter">H.I.M <span class="text-himTerracotta">PULSE</span></span>
+            </div>
+            <span class="px-2 py-0.5 text-[9px] font-mono font-bold tracking-widest bg-himTerracotta/20 text-himTerracotta border border-himTerracotta/40 rounded-md">
+              IN·XT™ LABS
+            </span>
+          </div>
+
+          <!-- Hero Ranveer Graphic Frame -->
+          <div class="my-2 relative rounded-2xl p-3 border border-white/15 bg-gradient-to-b from-surfaceLight to-obsidian text-center flex flex-col items-center overflow-hidden">
+            
+            <!-- Glow background -->
+            <div class="absolute top-0 right-0 w-32 h-32 bg-himTerracotta/15 rounded-full blur-2xl"></div>
+
+            <!-- Ranveer Artwork SVG Frame (guaranteed rendering) -->
+            <div class="relative w-36 h-36 my-1 rounded-2xl overflow-hidden border-2 border-himTerracotta shadow-[0_0_25px_rgba(255,85,0,0.45)] bg-obsidian flex items-center justify-center">
+              <svg viewBox="0 0 200 200" class="w-full h-full">
+                <!-- Background gradient -->
+                <defs>
+                  <linearGradient id="bgGrad1" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#1A1D26" />
+                    <stop offset="100%" stop-color="#090A0F" />
+                  </linearGradient>
+                  <linearGradient id="tubeGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#E2E8F0" />
+                    <stop offset="60%" stop-color="#FFFFFF" />
+                    <stop offset="100%" stop-color="#94A3B8" />
+                  </linearGradient>
+                </defs>
+                <rect width="200" height="200" fill="url(#bgGrad1)" />
+                <circle cx="100" cy="100" r="80" fill="#FF5500" opacity="0.15" />
+                
+                <!-- Ranveer Silhouette / Graphic representation -->
+                <!-- Hair -->
+                <path d="M 45,95 C 40,55 60,25 100,25 C 140,25 160,55 155,95 C 150,65 135,40 100,40 C 65,40 50,65 45,95 Z" fill="#1C1311" />
+                <path d="M 50,75 C 55,45 80,30 105,30 C 135,30 150,45 152,70 C 140,48 120,38 98,38 C 72,38 58,52 50,75 Z" fill="#2D1F1D" />
+                <!-- Neck & Shoulder -->
+                <path d="M 70,140 L 70,180 L 130,180 L 130,140 Z" fill="#D99B82" />
+                <path d="M 45,175 C 65,155 135,155 155,175 L 170,200 L 30,200 Z" fill="#334155" />
+                <!-- Face -->
+                <path d="M 62,80 C 62,60 75,55 100,55 C 125,55 138,60 138,80 C 138,110 128,142 100,142 C 72,142 62,110 62,80 Z" fill="#E5A68F" />
+                <!-- Beard & Stache -->
+                <path d="M 62,95 C 60,125 75,147 100,147 C 125,147 140,125 138,95 C 135,115 125,140 100,140 C 75,140 65,115 62,95 Z" fill="#1A1210" />
+                <path d="M 78,110 C 88,104 112,104 122,110 C 112,115 88,115 78,110 Z" fill="#1A1210" />
+                <!-- Eyes & Brows -->
+                <path d="M 70,75 Q 82,70 92,76" stroke="#1A1210" stroke-width="4" fill="none" stroke-linecap="round" />
+                <path d="M 108,76 Q 118,70 130,75" stroke="#1A1210" stroke-width="4" fill="none" stroke-linecap="round" />
+                <circle cx="82" cy="83" r="3.5" fill="#1A1210" />
+                <circle cx="118" cy="83" r="3.5" fill="#1A1210" />
+                
+                <!-- H.I.M Tube held in hand -->
+                <g transform="translate(130, 80) rotate(-15)">
+                  <!-- Tube Body -->
+                  <rect x="0" y="0" width="32" height="65" rx="5" fill="url(#tubeGrad1)" stroke="#CBD5E1" stroke-width="1" />
+                  <!-- Orange Cap -->
+                  <rect x="4" y="65" width="24" height="12" rx="2" fill="#FF5500" />
+                  <!-- H.I.M Orange Banner -->
+                  <rect x="3" y="15" width="26" height="22" fill="#FF5500" />
+                  <text x="16" y="28" font-family="Space Grotesk, sans-serif" font-weight="900" font-size="8" fill="#FFFFFF" text-anchor="middle">H·I·M</text>
+                  <text x="16" y="34" font-family="Inter, sans-serif" font-weight="700" font-size="3.5" fill="#FFFFFF" text-anchor="middle">FACE WASH</text>
+                  <text x="16" y="50" font-family="JetBrains Mono, monospace" font-weight="700" font-size="3" fill="#64748B" text-anchor="middle">IN·XT™</text>
+                </g>
+                <!-- Hand fingers -->
+                <path d="M 125,120 C 130,110 145,110 150,120 M 125,128 C 130,118 145,118 150,128 M 125,136 C 130,126 145,126 150,136" stroke="#D99B82" stroke-width="4" stroke-linecap="round" fill="none" />
+              </svg>
+              <span class="absolute bottom-1 right-1 bg-himTerracotta text-white font-mono font-black text-[8px] px-1.5 py-0.5 rounded shadow uppercase tracking-wider">
+                RS X H·I·M
+              </span>
+            </div>
+
+            <!-- Kinetic Speech Bubble with Launch Jokes -->
+            <div class="mt-2 bg-carbon border border-white/15 rounded-xl p-2.5 text-xs text-gray-200 relative w-full shadow-lg">
+              <div class="flex items-start gap-1.5">
+                <i class="fa-solid fa-quote-left text-himTerracotta text-sm mt-0.5"></i>
+                <div class="text-left flex-1">
+                  <p class="font-mono text-[9px] font-bold text-himTerracotta uppercase tracking-wider">RANVEER SINGH X H·I·M</p>
+                  <p id="p1-quote-text" class="italic text-[11px] text-white font-medium mt-0.5 leading-snug">
+                    "Someone once told me I was 'too handsome for an Indian'. Now we show them what H·I·M science means."
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Tap Shelf Roast Selector -->
+          <div class="my-1">
+            <label class="text-[10px] font-mono text-gray-400 uppercase font-bold tracking-wider block mb-1">
+              Tap What's On Your Bathroom Shelf:
+            </label>
+            <div class="grid grid-cols-2 gap-1.5 text-[10px]">
+              <button onclick="triggerShelfRoast('sister')" class="p-1.5 bg-surfaceLight hover:bg-white/10 border border-white/10 rounded-lg text-left truncate transition-all flex items-center gap-1.5">
+                <span class="text-himTerracotta">🧼</span> Sister's Face Wash
+              </button>
+              <button onclick="triggerShelfRoast('soap')" class="p-1.5 bg-surfaceLight hover:bg-white/10 border border-white/10 rounded-lg text-left truncate transition-all flex items-center gap-1.5">
+                <span class="text-amber-400">🧴</span> 3-in-1 Bar Soap
+              </button>
+              <button onclick="triggerShelfRoast('shampoo')" class="p-1.5 bg-surfaceLight hover:bg-white/10 border border-white/10 rounded-lg text-left truncate transition-all flex items-center gap-1.5">
+                <span class="text-neonCyan">🚿</span> Hostel Shampoo
+              </button>
+              <button onclick="triggerShelfRoast('tap')" class="p-1.5 bg-surfaceLight hover:bg-white/10 border border-white/10 rounded-lg text-left truncate transition-all flex items-center gap-1.5">
+                <span class="text-blue-400">💧</span> Plain Tap Water
+              </button>
+            </div>
+          </div>
+
+          <!-- Main CTA Buttons -->
+          <div class="space-y-2 my-1">
+            <button onclick="triggerShelfRoast('custom')" class="w-full py-2.5 px-3 rounded-xl font-display font-extrabold text-xs text-white bg-gradient-to-r from-himTerracotta to-amber-600 shadow-[0_0_20px_rgba(255,85,0,0.4)] hover:scale-[1.01] active:scale-[0.99] transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-fire text-white text-sm"></i>
+              <span>ROAST MY SHELF & GET IN·XT™ FIX</span>
+            </button>
+
+            <button onclick="setCity('blr')" class="w-full py-2.5 px-3 rounded-xl font-display font-bold text-xs text-gray-200 bg-surfaceLight border border-white/15 hover:border-himTerracotta transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-droplet text-neonCyan"></i>
+              <span>TEST MY CITY HARD WATER & AQI</span>
+            </button>
+          </div>
+
+          <!-- Live Ticker -->
+          <div class="mt-auto pt-2 border-t border-white/10 flex items-center gap-2 text-[10px] text-gray-400">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="truncate font-mono">⚡ <strong>582 Indian men</strong> tested IN·XT™ routines today</span>
+          </div>
+
+        </div>
+
+        <!-- Phone 1 Label Badge -->
+        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-surfaceLight border border-white/15 px-3 py-1 rounded-full text-xs font-mono font-bold text-himTerracotta flex items-center gap-1.5 shadow-xl">
+          <span class="w-2 h-2 rounded-full bg-himTerracotta"></span>
+          <span>SCREEN 1: HOOK & SHELF ROASTER</span>
+        </div>
+      </div>
+
+
+      <!-- ================= PHONE 2: ENVIRONMENTAL DATA & BLINKIT FUNNEL ================= -->
+      <div id="phone-2" class="w-full max-w-[365px] h-[730px] bg-carbon rounded-[46px] p-3 border-[6px] border-white/15 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative flex flex-col justify-between overflow-hidden group hover:border-neonCyan/50 transition-all duration-300">
+        
+        <!-- Status Bar -->
+        <div class="w-full pt-1 pb-2 px-6 flex items-center justify-between text-[11px] text-gray-400 font-mono border-b border-white/5 z-20 bg-carbon">
+          <span>9:41</span>
+          <div class="w-24 h-4 bg-obsidian rounded-full mx-auto flex items-center justify-center border border-white/10">
+            <div class="w-2 h-2 bg-neonCyan rounded-full"></div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-signal text-[10px]"></i>
+            <i class="fa-solid fa-wifi text-[10px]"></i>
+            <i class="fa-solid fa-battery-full text-[12px] text-neonCyan"></i>
+          </div>
+        </div>
+
+        <!-- Phone 2 Content -->
+        <div class="flex-1 flex flex-col justify-between p-3.5 bg-obsidian overflow-y-auto no-scrollbar relative">
+          
+          <!-- Top Location Bar -->
+          <div class="flex items-center justify-between pb-2 border-b border-white/10">
+            <div class="flex items-center gap-1.5 bg-surfaceLight border border-white/15 px-2.5 py-1 rounded-full text-[11px] font-mono font-bold text-white">
+              <i class="fa-solid fa-location-dot text-himTerracotta"></i>
+              <span id="p2-city-name">560001 • BENGALURU, KA</span>
+            </div>
+            <span class="text-[10px] text-neonCyan font-mono font-bold flex items-center gap-1">
+              <i class="fa-solid fa-microscope"></i> IN·XT™ Live
+            </span>
+          </div>
+
+          <!-- Environmental Score Gauge Card -->
+          <div class="my-2 bg-gradient-to-b from-surfaceLight to-obsidian border border-white/15 rounded-2xl p-3 text-center relative overflow-hidden">
+            <div class="flex items-center justify-center gap-3">
+              
+              <!-- Circle Progress Score -->
+              <div class="relative w-20 h-20 flex items-center justify-center">
+                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
+                  <path stroke-dasharray="100, 100" stroke-width="3.5" stroke="rgba(255,255,255,0.1)" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path id="score-circle" stroke-dasharray="86, 100" stroke-width="3.5" stroke="#FF5500" stroke-linecap="round" fill="none" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" class="transition-all duration-1000" />
+                </svg>
+                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                  <span id="p2-score-num" class="font-display font-black text-xl text-white">86</span>
+                  <span class="text-[8px] font-mono text-gray-400">/ 100</span>
+                </div>
+              </div>
+
+              <!-- Status Title -->
+              <div class="text-left flex-1">
+                <span id="p2-status-badge" class="px-2 py-0.5 text-[9px] font-mono font-black uppercase tracking-wider bg-himTerracotta/20 text-himTerracotta border border-himTerracotta/40 rounded">
+                  HIGH DAMAGE RISK
+                </span>
+                <h4 id="p2-status-title" class="font-display font-bold text-xs text-white mt-1 leading-tight">
+                  HARD WATER HAIRFALL & AQI SMOG ZONE
+                </h4>
+                <p id="p2-status-desc" class="text-[9.5px] text-gray-400 mt-0.5">IN·XT™ molecule shield required</p>
+              </div>
+            </div>
+
+            <!-- Telemetry Specs -->
+            <div class="grid grid-cols-3 gap-1.5 mt-3 pt-2 border-t border-white/10 text-center font-mono">
+              <div class="bg-obsidian p-1.5 rounded-lg border border-white/5">
+                <p class="text-[8.5px] text-gray-400">Water TDS</p>
+                <p id="p2-tds" class="font-bold text-xs text-himTerracotta">480 ppm</p>
+              </div>
+              <div class="bg-obsidian p-1.5 rounded-lg border border-white/5">
+                <p class="text-[8.5px] text-gray-400">Air AQI</p>
+                <p id="p2-aqi" class="font-bold text-xs text-neonCyan">142 AQI</p>
+              </div>
+              <div class="bg-obsidian p-1.5 rounded-lg border border-white/5">
+                <p class="text-[8.5px] text-gray-400">UV Index</p>
+                <p id="p2-uv" class="font-bold text-xs text-amber-400">8.4 (High)</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dynamic Ranveer Roast Box -->
+          <div class="bg-surfaceLight border border-himTerracotta/40 rounded-xl p-2.5 text-xs text-gray-200 relative">
+            <div class="flex items-start gap-2">
+              <!-- Ranveer Avatar Thumbnail -->
+              <div class="w-8 h-8 rounded-full overflow-hidden border border-himTerracotta shrink-0 bg-obsidian">
+                <svg viewBox="0 0 200 200" class="w-full h-full">
+                  <rect width="200" height="200" fill="#1A1D26" />
+                  <path d="M 45,95 C 40,55 60,25 100,25 C 140,25 160,55 155,95 Z" fill="#1C1311" />
+                  <path d="M 62,80 C 62,60 75,55 100,55 C 125,55 138,60 138,80 C 138,110 128,142 100,142 Z" fill="#E5A68F" />
+                  <path d="M 62,95 C 60,125 75,147 100,147 C 125,147 140,125 138,95 Z" fill="#1A1210" />
+                  <circle cx="82" cy="83" r="4" fill="#1A1210" />
+                  <circle cx="118" cy="83" r="4" fill="#1A1210" />
+                  <rect x="135" y="70" width="28" height="55" rx="4" fill="#FF5500" />
+                </svg>
+              </div>
+              <div>
+                <span class="font-mono text-[9px] font-bold text-himTerracotta uppercase">Ranveer's AI Shelf Roast:</span>
+                <p id="p2-roast-text" class="italic text-[11px] text-white leading-snug mt-0.5">
+                  "Using 3-in-1 detergent soap on your face in 480 TDS hard water? Bro, even IN·XT™ is judging you."
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Recommended 2-Step Product Bundle -->
+          <div class="my-2 bg-surfaceLight border border-white/10 rounded-xl p-2.5">
+            <div class="flex items-center justify-between text-[10px] text-gray-400 pb-1.5 mb-1.5 border-b border-white/10 font-mono">
+              <span class="font-bold text-white uppercase tracking-wider">Recommended IN·XT™ Bundle</span>
+              <span class="text-himTerracotta font-bold">2 Products</span>
+            </div>
+
+            <div id="p2-products-list" class="space-y-1.5 text-xs">
+              <div class="flex items-center justify-between bg-obsidian p-1.5 rounded-lg border border-white/5">
+                <div class="flex items-center gap-2">
+                  <div class="w-5 h-5 rounded bg-himTerracotta/20 text-himTerracotta flex items-center justify-center font-bold text-[10px]">1</div>
+                  <span class="font-medium text-gray-200 text-[11px]">2-in-1 Hard-Water Shield Shampoo</span>
+                </div>
+                <span class="font-bold text-white text-[11px]">₹499</span>
+              </div>
+              <div class="flex items-center justify-between bg-obsidian p-1.5 rounded-lg border border-white/5">
+                <div class="flex items-center gap-2">
+                  <div class="w-5 h-5 rounded bg-neonCyan/20 text-neonCyan flex items-center justify-center font-bold text-[10px]">2</div>
+                  <span class="font-medium text-gray-200 text-[11px]">Scalp Serum (Hard-Water Defense)</span>
+                </div>
+                <span class="font-bold text-white text-[11px]">₹699</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick-Commerce Checkout Buttons -->
+          <div class="space-y-2 mt-1">
+            <button onclick="simulateOrder('blinkit')" class="w-full py-2.5 px-3 rounded-xl font-display font-black text-xs text-obsidian bg-blinkitYellow hover:bg-yellow-400 shadow-[0_0_15px_rgba(248,203,70,0.4)] transition-all flex items-center justify-center gap-2">
+              <i class="fa-solid fa-bolt text-obsidian text-sm"></i>
+              <span>GET IN 10 MINS ON BLINKIT</span>
+            </button>
+
+            <button onclick="simulateOrder('d2c')" class="w-full py-2 px-3 rounded-xl font-display font-bold text-[11px] text-white bg-surfaceLight border border-white/20 hover:border-himTerracotta transition-all flex items-center justify-center gap-1.5">
+              <span>BUY ON HIMSCIENCE.COM</span>
+              <span class="text-himTerracotta font-mono font-extrabold">(15% OFF)</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Phone Label Badge -->
+        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-surfaceLight border border-white/15 px-3 py-1 rounded-full text-xs font-mono font-bold text-neonCyan flex items-center gap-1.5 shadow-xl">
+          <span class="w-2 h-2 rounded-full bg-neonCyan"></span>
+          <span>SCREEN 2: TELEMETRY & BLINKIT FUNNEL</span>
+        </div>
+      </div>
+
+
+      <!-- ================= PHONE 3: VIRAL IG STORY CARD & HOSTEL LEADERBOARD ================= -->
+      <div id="phone-3" class="w-full max-w-[365px] h-[730px] bg-carbon rounded-[46px] p-3 border-[6px] border-white/15 shadow-[0_25px_60px_rgba(0,0,0,0.9)] relative flex flex-col justify-between overflow-hidden group hover:border-amber-400/50 transition-all duration-300">
+        
+        <!-- Status Bar -->
+        <div class="w-full pt-1 pb-2 px-6 flex items-center justify-between text-[11px] text-gray-400 font-mono border-b border-white/5 z-20 bg-carbon">
+          <span>9:41</span>
+          <div class="w-24 h-4 bg-obsidian rounded-full mx-auto flex items-center justify-center border border-white/10">
+            <div class="w-2 h-2 bg-amber-400 rounded-full"></div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <i class="fa-solid fa-signal text-[10px]"></i>
+            <i class="fa-solid fa-wifi text-[10px]"></i>
+            <i class="fa-solid fa-battery-full text-[12px] text-amber-400"></i>
+          </div>
+        </div>
+
+        <!-- Phone 3 Content -->
+        <div class="flex-1 flex flex-col justify-between p-3.5 bg-obsidian overflow-y-auto no-scrollbar relative">
+          
+          <div class="text-center pb-2 border-b border-white/10">
+            <span class="font-mono font-extrabold text-[11px] text-amber-400 uppercase tracking-wider">
+              📲 VIRAL INSTAGRAM STORY CARD
+            </span>
+          </div>
+
+          <!-- INSTAGRAM STORY PREVIEW BOX -->
+          <div id="ig-story-card" class="my-2 bg-gradient-to-b from-carbon via-surfaceLight to-obsidian border-2 border-himTerracotta/50 rounded-2xl p-3.5 text-center relative overflow-hidden shadow-2xl">
+            
+            <!-- IG Header Bar -->
+            <div class="flex items-center justify-between text-[10px] text-gray-300 mb-2">
+              <div class="flex items-center gap-1.5">
+                <div class="w-5 h-5 rounded-full bg-himTerracotta p-0.5">
+                  <div class="w-full h-full bg-obsidian rounded-full flex items-center justify-center font-black text-[8px] text-white">H</div>
+                </div>
+                <span class="font-bold text-white">@himscience</span>
+              </div>
+              <span class="text-gray-400 font-mono text-[9px]">Tap for IN·XT™</span>
+            </div>
+
+            <!-- Ranveer Campaign Graphic SVG Frame inside Story Card -->
+            <div class="w-24 h-24 mx-auto my-1.5 rounded-xl overflow-hidden border-2 border-himTerracotta relative shadow-xl bg-obsidian flex items-center justify-center">
+              <svg viewBox="0 0 200 200" class="w-full h-full">
+                <rect width="200" height="200" fill="#090A0F" />
+                <path d="M 45,95 C 40,55 60,25 100,25 C 140,25 160,55 155,95 Z" fill="#1C1311" />
+                <path d="M 62,80 C 62,60 75,55 100,55 C 125,55 138,60 138,80 C 138,110 128,142 100,142 Z" fill="#E5A68F" />
+                <path d="M 62,95 C 60,125 75,147 100,147 C 125,147 140,125 138,95 Z" fill="#1A1210" />
+                <circle cx="82" cy="83" r="4" fill="#1A1210" />
+                <circle cx="118" cy="83" r="4" fill="#1A1210" />
+                <!-- Tube -->
+                <rect x="130" y="65" width="30" height="60" rx="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+                <rect x="132" y="78" width="26" height="20" fill="#FF5500" />
+                <text x="145" y="91" font-family="Space Grotesk" font-weight="900" font-size="7" fill="#FFFFFF" text-anchor="middle">H·I·M</text>
+              </svg>
+            </div>
+
+            <!-- Story Meme Headline -->
+            <div class="my-2 bg-obsidian/90 border border-himTerracotta/40 rounded-xl p-2 shadow-md">
+              <span class="text-[8.5px] font-mono font-bold tracking-widest text-himTerracotta uppercase block">H·I·M Environmental Telemetry</span>
+              <h3 id="p3-story-title" class="font-display font-black text-xs text-white uppercase leading-tight mt-0.5">
+                "OFFICIALLY TOO HANDSOME FOR BENGALURU’S HARD WATER"
+              </h3>
+              <p id="p3-story-stat" class="text-[9.5px] font-mono text-neonCyan font-bold mt-1">
+                480 TDS Hard Water • Powered by IN·XT™
+              </p>
+            </div>
+
+            <!-- Share IG Button -->
+            <button onclick="shareStory()" class="w-full py-2 px-3 bg-gradient-to-r from-fuchsia-600 to-purple-600 text-white font-display font-extrabold text-[11px] rounded-xl shadow-md flex items-center justify-center gap-2">
+              <i class="fa-brands fa-instagram text-sm"></i>
+              <span>SHARE TO STORY (UNLOCK ₹100 OFF)</span>
+            </button>
+          </div>
+
+          <!-- CAMPUS HARD-WATER LEADERBOARD -->
+          <div class="bg-surfaceLight border border-white/10 rounded-xl p-2.5">
+            <div class="flex items-center justify-between pb-1.5 mb-1 border-b border-white/10 text-[10px]">
+              <span class="font-bold text-white flex items-center gap-1">
+                <i class="fa-solid fa-trophy text-amber-400"></i> HOSTEL HARD-WATER LEADERBOARD
+              </span>
+              <span class="text-gray-400 font-mono text-[8.5px]">Live Drops</span>
+            </div>
+
+            <div id="leaderboard-list" class="space-y-1 text-[10.5px]">
+              <div class="flex items-center justify-between bg-obsidian p-1.5 rounded border border-white/5">
+                <span class="font-medium text-gray-200 truncate max-w-[170px]">#1 DSU Hostel, Kudlu Gate</span>
+                <span class="font-mono font-bold text-himTerracotta text-[9.5px]">495 TDS (148 checks)</span>
+              </div>
+              <div class="flex items-center justify-between bg-obsidian p-1.5 rounded border border-white/5">
+                <span class="font-medium text-gray-200 truncate max-w-[170px]">#2 Koramangala PGs, BLR</span>
+                <span class="font-mono font-bold text-amber-400 text-[9.5px]">470 TDS (112 checks)</span>
+              </div>
+              <div class="flex items-center justify-between bg-obsidian p-1.5 rounded border border-white/5">
+                <span class="font-medium text-gray-200 truncate max-w-[170px]">#3 North Campus, DEL</span>
+                <span class="font-mono font-bold text-neonCyan text-[9.5px]">440 TDS (96 checks)</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Phone Label Badge -->
+        <div class="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-surfaceLight border border-white/15 px-3 py-1 rounded-full text-xs font-mono font-bold text-amber-400 flex items-center gap-1.5 shadow-xl">
+          <span class="w-2 h-2 rounded-full bg-amber-400"></span>
+          <span>SCREEN 3: VIRAL STORY & CAMPUS ENGINE</span>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ================= OUTREACH PITCH MODAL ================= -->
+  <div id="pitch-modal" class="fixed inset-0 bg-obsidian/85 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-carbon border border-white/15 max-w-xl w-full rounded-2xl p-6 relative shadow-2xl">
+      <button onclick="closePitchModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-9 h-9 rounded-lg bg-himTerracotta text-white font-black flex items-center justify-center font-display text-lg">H</div>
+        <h3 class="font-display font-bold text-lg text-white">Outreach Pitch Script for OFF/BEAT & H.I.M</h3>
+      </div>
+
+      <p class="text-xs text-gray-400 mb-4">
+        Copy this exact DM to reach founders, EIRs, and product managers at OFF/BEAT Studios and H.I.M on LinkedIn:
+      </p>
+
+      <div class="bg-obsidian border border-white/10 rounded-xl p-3 text-xs text-gray-200 font-mono overflow-y-auto max-h-60 whitespace-pre-wrap select-all">
+Subject: Built a viral Quick-Commerce & Hard-Water acquisition engine for H.I.M
+
+Hi [Name],
+
+Loved the H.I.M launch film—especially Ranveer flipping "too handsome for an Indian" and Aman calling out guys secretly stealing their sister's face wash.
+
+As a CS engineering student, I built a mobile-first Growth & Conversion Engine for H.I.M tailored around your IN·XT™ hard-water science:
+
+1. "Stop Borrowing Her Face Wash" AI Roaster: Roasts a guy's current routine and swaps it for a 2-step H.I.M fix.
+2. Pin-Code Hard Water & AQI Telemetry: Pulls live local TDS data to drive instant 10-minute Blinkit orders.
+3. Shareable IG Story Cards + Campus Leaderboard: Organic peer referrals for college hostels.
+
+Check the live visual showcase I built here: [Insert Your Showcase URL]
+
+I’d love to join OFF/BEAT Studios / H.I.M as a Growth Engineering Intern to scale this tech across campuses. Open to a 10-minute chat this week?
+
+Best,
+[Your Name] | [LinkedIn / GitHub]
+      </div>
+
+      <div class="mt-4 flex items-center justify-end gap-3">
+        <button onclick="closePitchModal()" class="px-4 py-2 bg-white/10 text-white font-bold text-xs rounded-lg hover:bg-white/20">Close</button>
+        <button onclick="copyPitchText()" class="px-4 py-2 bg-himTerracotta text-white font-extrabold text-xs rounded-lg hover:bg-amber-600 flex items-center gap-1.5 shadow-lg">
+          <i class="fa-solid fa-copy"></i> Copy Pitch Script
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification -->
+  <div id="toast" class="fixed bottom-6 right-6 bg-himTerracotta text-white px-4 py-2.5 rounded-xl font-bold text-xs shadow-2xl flex items-center gap-2 transform translate-y-20 opacity-0 transition-all duration-300 z-50">
+    <i class="fa-solid fa-circle-check text-white"></i>
+    <span id="toast-text">Message copied!</span>
+  </div>
+
+  <!-- Footer -->
+  <footer id="pitch-footer" class="w-full border-t border-white/10 bg-carbon/50 py-4 px-6 text-center text-xs text-gray-500 mt-8">
+    <p>Project H.I.M Pulse • Designed & Engineered for Ranveer Singh & Aman Gupta’s H.I.M (OFF/BEAT Studios)</p>
+  </footer>
+
+  <!-- ================= JAVASCRIPT ================= -->
+  <script>
+    // City Telemetry Store
+    const cityData = {
+      blr: {
+        code: "560001 • BENGALURU, KA",
+        score: "86",
+        scoreCircle: "86, 100",
+        badge: "HIGH DAMAGE RISK",
+        statusTitle: "HARD WATER HAIRFALL & AQI SMOG ZONE",
+        tds: "480 ppm",
+        aqi: "142 AQI",
+        uv: "8.4 (High)",
+        roast: '"Using 3-in-1 detergent soap on your face in 480 TDS hard water? Bro, even IN·XT™ is judging you."',
+        storyTitle: '"OFFICIALLY TOO HANDSOME FOR BENGALURU’S HARD WATER"',
+        storyStat: "480 TDS Hard Water • Powered by IN·XT™",
+        products: [
+          { name: "2-in-1 Hard-Water Shield Shampoo", price: "₹499" },
+          { name: "Scalp Serum (Hard-Water Defense)", price: "₹699" }
+        ],
+        leaderboard: [
+          { name: "#1 DSU Hostel, Kudlu Gate", stat: "495 TDS (148 checks)" },
+          { name: "#2 Koramangala PGs, BLR", stat: "470 TDS (112 checks)" },
+          { name: "#3 North Campus, DEL", stat: "440 TDS (96 checks)" }
+        ]
+      },
+      del: {
+        code: "110001 • NEW DELHI, DL",
+        score: "94",
+        scoreCircle: "94, 100",
+        badge: "CRITICAL SMOG RISK",
+        statusTitle: "SEVERE AQI & HARD-WATER ZONE",
+        tds: "520 ppm",
+        aqi: "385 AQI",
+        uv: "6.1 (Moderate)",
+        roast: '"Breathing 385 AQI Delhi smog and using stolen body lotion on your face? Your skin needs IN·XT™ ASAP."',
+        storyTitle: '"SURVIVING DELHI SMOG & HARD WATER LIKE A BOSS"',
+        storyStat: "385 AQI Smog Shielded • Powered by IN·XT™",
+        products: [
+          { name: "IN·XT™ Anti-Pollution Face Wash", price: "₹349" },
+          { name: "Daily Matte Sunscreen Gel (SPF 50)", price: "₹499" }
+        ],
+        leaderboard: [
+          { name: "#1 North Campus / GTB Nagar", stat: "530 TDS (210 checks)" },
+          { name: "#2 Janakpuri Hostels, DEL", stat: "510 TDS (164 checks)" },
+          { name: "#3 DSU Hostel, Kudlu Gate", stat: "495 TDS (148 checks)" }
+        ]
+      },
+      bom: {
+        code: "400001 • MUMBAI, MH",
+        score: "78",
+        scoreCircle: "78, 100",
+        badge: "HUMIDITY SEBUM RISK",
+        statusTitle: "HIGH HUMIDITY & UV TAN ZONE",
+        tds: "240 ppm",
+        aqi: "168 AQI",
+        uv: "9.2 (Very High)",
+        roast: '"Mumbai humidity + sweat = clogged pores by 2 PM. Stop washing your face with plain tap water, bro."',
+        storyTitle: '"TOO HANDSOME FOR MUMBAI HUMIDITY & UV TAN"',
+        storyStat: "Sebum & UV Shielded • Powered by IN·XT™",
+        products: [
+          { name: "Oil-Control Charcoal Face Wash", price: "₹349" },
+          { name: "Ultra-Light Hydrating Gel", price: "₹449" }
+        ],
+        leaderboard: [
+          { name: "#1 VJTI / Matunga PGs", stat: "310 TDS (130 checks)" },
+          { name: "#2 Mithibai Area, Vile Parle", stat: "280 TDS (105 checks)" },
+          { name: "#3 DSU Hostel, Kudlu Gate", stat: "495 TDS (148 checks)" }
+        ]
+      },
+      has: {
+        code: "573201 • HASSAN, KA",
+        score: "82",
+        scoreCircle: "82, 100",
+        badge: "HIGH BOREWELL HARD WATER",
+        statusTitle: "BOREWELL MINERAL SCALP BUILDUP",
+        tds: "460 ppm",
+        aqi: "88 AQI",
+        uv: "7.8 (High)",
+        roast: '"Borewell hard water in Hassan stripping your scalp oils? IN·XT™ hard-water shampoo was literally built for this."',
+        storyTitle: '"HANDSOME HASSAN MAN SURVIVING 460 TDS BOREWELL WATER"',
+        storyStat: "460 TDS Borewell Shielded • IN·XT™ Powered",
+        products: [
+          { name: "2-in-1 Hard-Water Shield Shampoo", price: "₹499" },
+          { name: "IN·XT™ Anti-Pollution Face Wash", price: "₹349" }
+        ],
+        leaderboard: [
+          { name: "#1 MCE Hostel, Hassan", stat: "465 TDS (184 checks)" },
+          { name: "#2 DSU Hostel, Kudlu Gate", stat: "495 TDS (148 checks)" },
+          { name: "#3 Koramangala PGs, BLR", stat: "470 TDS (112 checks)" }
+        ]
+      }
+    };
+
+    const ranveerQuotes = [
+      '"Someone once told me I was \'too handsome for an Indian\'. Now we show them what H·I·M science means."',
+      '"Bro, stop stealing your sister\'s face wash. Your hard-water skin needs real IN·XT™ science."',
+      '"Handsome and Indian were never two different things."',
+      '"3-in-1 soap on your face? Bro, even IN·XT™ is judging you right now."'
+    ];
+    let quoteIndex = 0;
+
+    // Toggle Screenshot Mode
+    let isScreenshotMode = false;
+    function toggleScreenshotMode() {
+      isScreenshotMode = !isScreenshotMode;
+      const notice = document.getElementById('pitch-notice');
+      const tagline = document.getElementById('pitch-tagline');
+      const footer = document.getElementById('pitch-footer');
+      const btnText = document.getElementById('screenshot-btn-text');
+
+      if (isScreenshotMode) {
+        notice.classList.add('hidden');
+        tagline.classList.add('hidden');
+        footer.classList.add('hidden');
+        btnText.innerText = 'Exit Screenshot Mode';
+        document.body.classList.add('p-2');
+        showToast('Screenshot Mode ON! Capture clean phone screens now.');
+      } else {
+        notice.classList.remove('hidden');
+        tagline.classList.remove('hidden');
+        footer.classList.remove('hidden');
+        btnText.innerText = 'Screenshot Mode';
+        document.body.classList.remove('p-2');
+      }
+    }
+
+    // Set City Telemetry Data
+    function setCity(cityKey) {
+      const d = cityData[cityKey];
+      if (!d) return;
+
+      ['blr', 'del', 'bom', 'has'].forEach(k => {
+        const btn = document.getElementById(`btn-${k}`);
+        if (k === cityKey) {
+          btn.className = "px-2.5 py-1 rounded-md font-bold transition-all bg-himTerracotta text-white shadow-sm";
+        } else {
+          btn.className = "px-2.5 py-1 rounded-md font-bold text-gray-400 hover:text-white transition-all";
+        }
+      });
+
+      document.getElementById('p2-city-name').innerText = d.code;
+      document.getElementById('p2-score-num').innerText = d.score;
+      document.getElementById('score-circle').setAttribute('stroke-dasharray', d.scoreCircle);
+      document.getElementById('p2-status-badge').innerText = d.badge;
+      document.getElementById('p2-status-title').innerText = d.statusTitle;
+      document.getElementById('p2-tds').innerText = d.tds;
+      document.getElementById('p2-aqi').innerText = d.aqi;
+      document.getElementById('p2-uv').innerText = d.uv;
+      document.getElementById('p2-roast-text').innerText = d.roast;
+
+      // Update Products
+      const prodList = document.getElementById('p2-products-list');
+      prodList.innerHTML = d.products.map((p, idx) => `
+        <div class="flex items-center justify-between bg-obsidian p-1.5 rounded-lg border border-white/5">
+          <div class="flex items-center gap-2">
+            <div class="w-5 h-5 rounded ${idx === 0 ? 'bg-himTerracotta/20 text-himTerracotta' : 'bg-neonCyan/20 text-neonCyan'} flex items-center justify-center font-bold text-[10px]">${idx + 1}</div>
+            <span class="font-medium text-gray-200 text-[11px]">${p.name}</span>
+          </div>
+          <span class="font-bold text-white text-[11px]">${p.price}</span>
+        </div>
+      `).join('');
+
+      // Update Story & Leaderboard
+      document.getElementById('p3-story-title').innerText = d.storyTitle;
+      document.getElementById('p3-story-stat').innerText = d.storyStat;
+
+      const lbList = document.getElementById('leaderboard-list');
+      lbList.innerHTML = d.leaderboard.map(item => `
+        <div class="flex items-center justify-between bg-obsidian p-1.5 rounded border border-white/5">
+          <span class="font-medium text-gray-200 truncate max-w-[170px]">${item.name}</span>
+          <span class="font-mono font-bold text-himTerracotta text-[9.5px]">${item.stat}</span>
+        </div>
+      `).join('');
+
+      showToast(`Loaded ${d.code.split('•')[1].trim()} Environmental Telemetry`);
+    }
+
+    // Trigger Shelf Roast
+    function triggerShelfRoast(type) {
+      quoteIndex = (quoteIndex + 1) % ranveerQuotes.length;
+      document.getElementById('p1-quote-text').innerText = ranveerQuotes[quoteIndex];
+
+      const customRoasts = {
+        sister: '"Borrowing your sister\'s face wash won\'t fix your 480 TDS hard-water hairfall, bro. Get H·I·M IN·XT™."',
+        soap: '"3-in-1 bar soap on your face? Bro, even IN·XT™ is judging you right now."',
+        shampoo: '"Hostel detergent shampoo stripping your natural oils? Switch to H·I·M Hard-Water Shield."',
+        tap: '"Plain tap water doesn\'t wash away 142 AQI smog and heavy minerals. Upgrade your shelf."'
+      };
+
+      if (customRoasts[type]) {
+        document.getElementById('p2-roast-text').innerText = customRoasts[type];
+      }
+
+      document.getElementById('phone-2').scrollIntoView({ behavior: 'smooth' });
+      showToast('AI Roast updated! Navigated to Telemetry & Blinkit Funnel.');
+    }
+
+    // Order Simulation
+    function simulateOrder(platform) {
+      if (platform === 'blinkit') {
+        showToast('⚡ Redirecting to Blinkit (10-Min Delivery)!');
+      } else {
+        showToast('🛒 Redirecting to himscience.com (15% OFF applied)!');
+      }
+    }
+
+    function shareStory() {
+      showToast('📸 Downloaded Story Card + Discount Code copied!');
+    }
+
+    // Modal Controls
+    function openPitchModal() {
+      document.getElementById('pitch-modal').classList.remove('hidden');
+    }
+    function closePitchModal() {
+      document.getElementById('pitch-modal').classList.add('hidden');
+    }
+    function copyPitchText() {
+      const text = `Subject: Built a viral Quick-Commerce & Hard-Water acquisition engine for H.I.M\n\nHi [Name],\n\nLoved the H.I.M launch film—especially Ranveer flipping "too handsome for an Indian" and Aman calling out guys secretly stealing their sister's face wash.\n\nAs a CS engineering student, I built a mobile-first Growth & Conversion Engine for H.I.M tailored around your IN·XT™ hard-water science:\n\n1. "Stop Borrowing Her Face Wash" AI Roaster\n2. Pin-Code Hard Water & AQI Telemetry\n3. Shareable IG Story Cards + Campus Leaderboard\n\nI’d love to join OFF/BEAT Studios / H.I.M as a Growth Engineering Intern to scale this tech. Open to a 10-minute chat this week?\n\nBest,\n[Your Name] | [LinkedIn / GitHub]`;
+      
+      const el = document.createElement('textarea');
+      el.value = text;
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+
+      closePitchModal();
+      showToast('Outreach pitch script copied to clipboard!');
+    }
+
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toast-text').innerText = msg;
+      toast.classList.remove('translate-y-20', 'opacity-0');
+      setTimeout(() => {
+        toast.classList.add('translate-y-20', 'opacity-0');
+      }, 3000);
+    }
+  </script>
+</body>
+</html>
